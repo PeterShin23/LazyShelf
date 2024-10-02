@@ -7,7 +7,8 @@
   "license": "MIT",
   "private": true,
   "workspaces": [
-    "monorepo/*"
+    "monorepo/frontend",
+    "monorepo/backend"
   ],
   "scripts": {
     "start-fe": "npm --prefix monorepo/frontend start",

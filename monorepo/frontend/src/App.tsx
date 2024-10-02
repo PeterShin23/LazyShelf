@@ -2,24 +2,18 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
+const App = () => {
+  const [text, setText] = React.useState<string>("before click");
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/LazyShelf.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <button 
+        className="text-white bg-black"
+        onClick={() => setText("now changed can't go back")}
+      >
+        Click me to change
+      </button>
+      <p className="text-blue-700">{text}</p>
     </div>
   );
 }
