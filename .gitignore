@@ -2,3 +2,5 @@
 # compiled options
 /node_modules
 /dist
+
+.DS_Store
