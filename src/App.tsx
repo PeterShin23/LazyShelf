@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import './style.less';
-import './shared/styles/tailwind.css'
 import { ShowCaseContainer } from './components/showcase-container';
 
 const App = () => {
