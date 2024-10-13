@@ -1,3 +1,4 @@
+import { API } from "../client/api";
 import * as React from "react";
 import { StartLoadingScreen } from "./common/start-loading-screen";
 
@@ -6,6 +7,8 @@ export const ShowCaseContainer = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
   React.useEffect(() => {
+    const apiResponse = API.getDataFromServer().then(res => console.log(res));
+
     const timerId = setTimeout(() => setIsLoading(false), 2500)
 
     return () => clearTimeout(timerId);

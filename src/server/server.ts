@@ -5,11 +5,15 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import App from '../App'; // Import the shared App component
 import path from 'path';
+import apiRouter from './api'; // Import API router
 
 const app = express();
 
 // Serve static files from the 'public' directory
 app.use(express.static(path.resolve(__dirname, '../../public')));
+
+// Use the API router for `/api` routes
+app.use('/api', apiRouter);
 
 // Server-Side Rendering for all other routes
 app.get('*', (req, res) => {
