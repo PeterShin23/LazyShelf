@@ -1,0 +1,32 @@
+import * as React from "react";
+import { StartLoadingScreen } from "./common/start-loading-screen";
+
+export const ShowCaseContainer = () => {
+  const [text, setText] = React.useState<string>("before click");
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
+
+  React.useEffect(() => {
+    const timerId = setTimeout(() => setIsLoading(false), 2500)
+
+    return () => clearTimeout(timerId);
+  }, []);
+
+  return (
+    <>
+      {isLoading ? <StartLoadingScreen />
+      : (
+          <div>
+            <button 
+              className="text-white bg-black"
+              onClick={() => {
+                setText("Welcome to my showcase")
+              }}
+            >
+              Click me to change
+            </button>
+            <p className="text-blue-700">{text}</p>
+          </div>
+        )}
+    </>
+  )
+}
