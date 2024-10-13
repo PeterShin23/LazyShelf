@@ -15,7 +15,7 @@ export const ShowCaseContainer = () => {
   }, []);
 
   return (
-    <>
+    <div className="app-font">
       {isLoading ? <StartLoadingScreen />
       : (
           <div>
@@ -30,6 +30,6 @@ export const ShowCaseContainer = () => {
             <p className="text-blue-700">{text}</p>
           </div>
         )}
-    </>
+    </div>
   )
 }

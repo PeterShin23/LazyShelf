@@ -35,8 +35,8 @@ app.get('*', (req, res) => {
       <link rel="manifest" href="./manifest.json" />
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&display=swap"
+      <link 
+        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&display=swap" 
         rel="stylesheet"
       />
       <title>My Lazy Shelf</title>
