@@ -1,0 +1,5 @@
+export enum MediaType {
+  INSTAGRAM_IMAGE = 1,
+  INSTAGRAM_CAROUSEL = 2,
+  INSTAGRAM_VIDEO = 3,
+}
