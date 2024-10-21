@@ -8,6 +8,7 @@ export const ShowCaseContainer = () => {
 
   React.useEffect(() => {
     const apiResponse = API.getDataFromServer().then(res => console.log(res));
+    const apiResponse2 = API.getTestDataFromServer().then(res => console.log(res));
 
     const timerId = setTimeout(() => setIsLoading(false), 2500)
 

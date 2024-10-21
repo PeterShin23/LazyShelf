@@ -10,6 +10,17 @@ const getDataFromServer = async () => {
   }
 };
 
+const getTestDataFromServer = async () => {
+  try {
+    const response = await axios.get('/api/test-data');
+    return JSON.parse(response.data); // This will contain the server response
+  } catch (error) {
+    console.error('Error fetching data from server:', error);
+    throw error;
+  }
+};
+
 export const API = {
   getDataFromServer,
+  getTestDataFromServer,
 }
