@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Instagram Redirect</title>
+    <script>
+      window.onload = function () {
+        // Extract the authorization code from the URL query parameter
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get('code');
+        if (code) {
+          // Send the authorization code to the parent window (the React app)
+          window.opener.postMessage({ code: code }, '*');
+
+          // Close the tab after sending the message
+          try {
+            // Attempt to close the window automatically
+            window.close();
+          } catch (e) {
+            // If the automatic close fails, display the manual close button
+            document.getElementById('closeButton').style.display = 'block';
+          }
+        }
+      };
+    </script>
+  </head>
+  <body>
+    Redirecting...
+    <button id="closeButton" style="display:none;" onclick="window.close()">Click here to close this tab</button>
+  </body>
+</html>
