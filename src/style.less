@@ -17,3 +17,33 @@
 .font-weight-heavy {
   font-weight: 500
 }
+
+.slide-from-right {
+  animation: slide-from-right 0.3s east-out forwards;
+}
+
+@keyframes slide-from-right {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transofrm: translateX(0);
+    opacity: 1;
+  }
+}
+
+.slide-out-right {
+  animation: slide-out-right 0.3s east-out forwards;
+}
+
+@keyframes slide-out-right {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}

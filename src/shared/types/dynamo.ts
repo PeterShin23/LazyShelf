@@ -2,11 +2,17 @@ import { UserPaymentOption } from "../enums/dynamo";
 
 export type UserConfig = {
   username: string;  // partition key
+  email: string;
+  password: string;
+  isActive: string;
   createdDate: string;
-  uiColor?: string;
+  uiOptions?: string;
+  longLivedAccessToken: string;
   paymentOption: UserPaymentOption;
-  longTermKey: string;
   balanceRemaining: number;
+  lastPaymentDate: string;
+  nextPaymentDate: string;
   lastDataFetchedDate: string;
   dataFetchAttempts: number;
+  isDataFetchSuccess: boolean;
 }

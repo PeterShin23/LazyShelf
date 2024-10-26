@@ -1,4 +1,5 @@
 import axios from "axios";
+import { httpsRoute } from "../../../shared/constants/https";
 
 const fetchTestData = async () => {
   try {
@@ -7,7 +8,7 @@ const fetchTestData = async () => {
     {
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "http://localhost:5500/"
+        "Access-Control-Allow-Origin": `${httpsRoute}/`
       },
       queryStringParameters: {
         objectKey: "tst/dump/facebook-data-test.json"
