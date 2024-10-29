@@ -3,7 +3,8 @@
 Intended to create a website that pulls data from instagram and displays it as a nice collage for lazy photographers who don't want to make their own portfolio website.
 
 # Demo
-![showcase demo](https://github.com/user-attachments/assets/97adb5c1-4864-4294-8e9c-d7f698b0ce72)
+![showcase demo](https://github.com/user-attachments/assets/640fd9fd-2949-4bb6-9dbe-630a5b10e498)
+
 
 
 
