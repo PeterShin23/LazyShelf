@@ -1,6 +1,8 @@
 require('ignore-styles');
 
 import express from 'express';
+// import bodyParser from 'body-parser';
+
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import App from '../App'; // Import the shared App component
@@ -12,12 +14,28 @@ const app = express();
 // Serve static files from the 'public' directory
 app.use(express.static(path.resolve(__dirname, '../../public')));
 
+// Parse JSON in req body
+app.use(express.json());
 // Use the API router for `/api` routes
 app.use('/api', apiRouter);
 
 // Server-Side Rendering for all other routes
 app.get('*', (req, res) => {
-  const appString = renderToString(React.createElement(App as React.ComponentType));
+  const usersToRetrieve = new Set("peter.shin");
+
+  const username = req.url ? req.url.split("/")[1] : "peter.shin";
+
+  usersToRetrieve.add(username);
+
+  const initialState = {
+    username: req.url ? req.url.split("/")[1] : "peter.shin"
+  }
+
+
+
+  const appString = renderToString(React.createElement(
+    App, { initialState }
+  ));
 
   const html = `
     <!DOCTYPE html>
@@ -43,6 +61,10 @@ app.get('*', (req, res) => {
     </head>
     <body>
       <div id="root">${appString}</div>
+      <!-- Inject initial state as a global variable -->
+      <script>
+        window.__INITIAL_STATE__ = ${JSON.stringify(initialState).replace(/</g, '\\u003c')}; 
+      </script>
       <script src="/bundle.js"></script>
     </body>
     </html>

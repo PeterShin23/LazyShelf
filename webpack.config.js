@@ -23,7 +23,15 @@ module.exports = {
         use: [
           'style-loader', // Inject CSS into the DOM
           'css-loader',   // Resolve @import and url() paths in CSS
-          'less-loader',  // Compile LESS to CSS
+          {
+            loader: 'less-loader',  // Compile LESS to CSS
+            options: {
+              lessOptions: {
+                strictMath: false,
+                silent: true,
+              }
+            }
+          }
         ],
         exclude: /node_modules/,
       },
@@ -31,6 +39,14 @@ module.exports = {
         test: /\.css$/, 
         use: ['style-loader', 'css-loader', 'postcss-loader'],
         exclude: /node_modules/,
+      },
+      { 
+        test: /\.svg$/, 
+        use: 'svg-inline-loader' 
+      },
+      {
+        test: /\.(png|jpg|jpeg|gif)$/i,
+        type: 'asset/resource', // This is the modern way of handling static assets
       },
     ],
   },

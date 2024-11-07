@@ -1,4 +1,4 @@
-import { UserPaymentOption } from "../enums/dynamo";
+import { UserPaymentOption, UserUiTemplate } from "../enums/dynamo";
 
 export type UserConfig = {
   username: string;  // partition key
@@ -15,4 +15,9 @@ export type UserConfig = {
   lastDataFetchedDate: string;
   dataFetchAttempts: number;
   isDataFetchSuccess: boolean;
+}
+
+export type UserUiOptions = {
+  color: string;
+  templateId: UserUiTemplate;
 }

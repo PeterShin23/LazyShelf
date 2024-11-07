@@ -10,13 +10,13 @@ export type User = {
 
 export type Media = {
   parentMediaType?: MediaType;
-  parentMediaUrl?: string;
+  parentMediaId?: string;
   mediaType: MediaType
   mediaUrl: string;
   mediaId: string;
   likeCount: number;
   isHidden?: boolean;
-  timeStamp: string;
+  timeStamp?: string;
   caption?: string;
   category?: string;
 }
