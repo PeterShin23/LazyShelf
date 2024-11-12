@@ -41,10 +41,10 @@ export const RedirectToInsta = () => {
   }, []);
 
   return (
-    <UserScreenCard headerText="4. Redirect to Instagram">
-      <p>Now that you have an account with me, this next step will ask you to allow this application to retrieve your media data.</p>
+    <UserScreenCard headerText="3. Redirect to Instagram">
+      <p className="mb-3">This next step will ask you to allow this application to retrieve your media data.</p>
       <p>If you decide not to proceed here, this application will not have access to the media in your account.</p>
-      <p>If you do, we'll be able to create your portfolio right away, assuming that your Instagram and Facebook have been updated as specified in step 2.</p>
+      <p className="mb-3">If you do, we'll be able to begin creating your portfolio right away, assuming that your Instagram and Facebook have been updated as specified in step 2.</p>
       <p>Once your ready, please login and allow permissions for this application!</p>
       <div className="flex w-full h-full items-center justify-center">
         <button 

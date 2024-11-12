@@ -14,17 +14,47 @@ export enum SignUpStep {
 }
 
 export const SignUpCards = () => {
+  const [step, setStep] = React.useState<number>(1);
+
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+  const onClick = (e) => {
+    if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') {
+      return;
+    }
+
+    if (containerRef.current) {
+      const { clientX } = e;
+      const { left, width } = containerRef.current.getBoundingClientRect();
+      const midpoint = left + width / 2;
+
+      if (clientX < midpoint) {
+        // Clicked on the left half, scroll left
+        containerRef.current.scrollBy({ left: -450, behavior: 'smooth' });
+        setStep(step - 1)
+      } else {
+        // Clicked on the right half, scroll right
+        containerRef.current.scrollBy({ left: 450, behavior: 'smooth' });
+        setStep(step + 1)
+      }
+    }
+  };
+
   return (
     <div className="media-carousel flex-col">
-      <div className="sign-up-cards-container flex flex-row mb-5 overflow-x-scroll gap-x-5" 
+      <div 
+        ref={containerRef}
+        className="sign-up-cards-container flex flex-row mb-5 overflow-x-scroll gap-x-5" 
         style={{
-          width: "450px"
-        }}>
+          width: "450px",
+          scrollBehavior: 'smooth', // Enables smooth scrolling
+        }}
+        onClick={onClick}
+        >
         <TermsAgreementCard />
         <ExternalSetupCard />
-        <CreateAccountCard />
         <RedirectToInsta />
-        <SetUpFinishedCard />
+        <CreateAccountCard />
       </div>
     </div>
   )

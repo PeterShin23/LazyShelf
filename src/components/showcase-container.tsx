@@ -30,7 +30,9 @@ export const ShowCaseContainer = (props: ShowCaseContainerProps) => {
 
   const getContainerView = () => {
     switch (state.view) {
-      case ContainerView.MediaDisplay:
+      case ContainerView.TheDevDisplay:
+        return <TheDevContainer />
+      default:
         return (
           <>
             <div className="flex flex-col justify-center my-8" style={{ marginLeft: "100px", marginRight: "100px" }}>
@@ -49,16 +51,13 @@ export const ShowCaseContainer = (props: ShowCaseContainerProps) => {
                     src={m.mediaUrl} 
                     width="275px"
                     onClick={() => setSelectedMediaId(m.mediaId)} 
+                    loading="lazy"
                   />
                 ))}
               </div>
             </div>
           </>
         )
-      case ContainerView.TheDevDisplay:
-        return <TheDevContainer />
-      case ContainerView.SignUpCards:
-        return <SignUpCards />
     }
   }
 
@@ -66,6 +65,9 @@ export const ShowCaseContainer = (props: ShowCaseContainerProps) => {
     <div className="">
       <HeaderContainer />
       {getContainerView()}
+      {state.view === ContainerView.SignUpCards && (
+        <SignUpCards />
+      )}
       {selectedMediaId && (
         <MediaCarousel 
           initialMediaId={selectedMediaId} 

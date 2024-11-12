@@ -31,7 +31,9 @@ app.get('*', (req, res) => {
     username: req.url ? req.url.split("/")[1] : "peter.shin"
   }
 
-
+  // Retrieve data from dynamo here and pump them into state
+  // If user doesn't exist then get me
+  
 
   const appString = renderToString(React.createElement(
     App, { initialState }

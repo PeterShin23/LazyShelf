@@ -9,6 +9,7 @@ export const TermsAgreementCard = () => {
       <p>1. retrieve your data from Instagram,</p>
       <p>2. display your media on a public domain,</p>
       <p>3. store your Instagram media data and some of your user data to identify you.</p>
+      <br />
       <p>Your data will not be used for any other purpose than to display your photography portfolio.</p>
     </UserScreenCard>
   )
