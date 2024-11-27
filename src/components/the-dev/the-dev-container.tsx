@@ -10,6 +10,8 @@ export const TheDevContainer = () => {
   const { uiColor } = state;
 
   const [pfpLoaded, setPfpLoaded] = React.useState<boolean>(false);
+  const [onLinkedinHover, setOnLinkedinHover] = React.useState<boolean>(false);
+  const [onInstagramHover, setOnInstagramHover] = React.useState<boolean>(false);
 
   return (
     <section className="flex flex-row items-center mx-32 mt-8 gap-x-12"
@@ -35,8 +37,26 @@ export const TheDevContainer = () => {
             />
         </div>
         <div className="flex flex-row items-center justify-center gap-x-8 pt-6">
-          <LinkedInIcon />
-          <InstagramIcon />
+          <div
+            onMouseEnter={() => setOnLinkedinHover(true)}
+            onMouseLeave={() => setOnLinkedinHover(false)}
+            style={{
+              transform: onLinkedinHover ? "scale(1.3)" : "scale(1)",
+              transition: "transform 0.15s ease-in-out",
+            }}
+            >
+            <LinkedInIcon fillColor={onLinkedinHover ? "#0a66c2" : "black"} />
+          </div>
+          <div
+            onMouseEnter={() => setOnInstagramHover(true)}
+            onMouseLeave={() => setOnInstagramHover(false)}
+            style={{
+              transform: onInstagramHover ? "scale(1.3)" : "scale(1)",
+              transition: "transform 0.15s ease-in-out",
+            }}
+          >
+            <InstagramIcon strokeColor={onInstagramHover ? "#0081FB" : "black"} />
+          </div>
         </div>
       </div>
       <div className="flex w-1/2 flex-col text-left font-extralight">

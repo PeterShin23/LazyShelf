@@ -17,8 +17,6 @@ const abortController = new AbortController();
 const { signal } = abortController;
 
 if (root && !signal.aborted) {
-  console.log(initialState);
-
   hydrateRoot(root, <App initialState={initialState} />);
 } 
 

@@ -54,7 +54,7 @@ export const SignUpCards = () => {
         <TermsAgreementCard />
         <ExternalSetupCard />
         <RedirectToInsta />
-        <CreateAccountCard />
+        {/* <CreateAccountCard /> */}
       </div>
     </div>
   )

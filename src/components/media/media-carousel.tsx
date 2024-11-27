@@ -22,8 +22,6 @@ export const MediaCarousel = (props: MediaCarouselProps) => {
 
     if (!initialMediaPosition) return;
 
-    console.log(initialMediaPosition);
-
     scrollContainer.scrollLeft = initialMediaPosition.left - (window.innerWidth * 0.7) + (initialMediaPosition.width * 1.47);
   }, [])
 

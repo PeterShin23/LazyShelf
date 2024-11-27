@@ -1,5 +1,6 @@
 import * as React from "react";
 import { ContainerView } from "../shared/enums/fe";
+import { InitialState } from "../shared/types/intial-state";
 
 export enum AppActions {
   SetUiOptionColor = "set-ui-option-color",
@@ -11,8 +12,10 @@ export type AppDispatchType =
   | { type: AppActions.SetContainerView; payload: ContainerView };
 
 export type AppState = {
-  uiColor?: string;
+  uiColor: string;
   view: ContainerView;
+  enabledIgUsers: string[];
+  initialState: InitialState;
 }
 
 export type AppContextType = {

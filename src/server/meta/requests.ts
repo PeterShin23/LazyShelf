@@ -17,7 +17,7 @@ const retrieveLongLivedAccessToken = async (req: Request) => {
     const response = await axios.get(url, {
       params: {
         grant_type: "ig_exchange_token",
-        client_secret: igClientSecret,
+        client_secret: process.env.INSTAGRAM_CLIENT_SECRET,
         access_token: shortLivedAccessToken,
       },
       headers: {
@@ -26,7 +26,7 @@ const retrieveLongLivedAccessToken = async (req: Request) => {
       }
     });
 
-    console.log(response);
+    // console.log(response);
     return response.data;
   } catch (e) {
     console.log(e);
@@ -39,10 +39,10 @@ const getIgUser = async (req) => {
   try {
     const { shortLivedAccessToken } = req.body;
 
-    console.log(shortLivedAccessToken);
+    // console.log(shortLivedAccessToken);
 
     const url = `https://graph.instagram.com/v21.0/me`
-    console.log("url", url);
+    // console.log("url", url);
 
     // convert to api gateway endpoint
     const response = await axios.get(url, {
@@ -56,7 +56,7 @@ const getIgUser = async (req) => {
       }
     });
 
-    console.log(response);
+    // console.log(response);
     return response.data;
   } catch (e) {
     // console.log(e); 
@@ -113,7 +113,9 @@ const getIgUserMedia = async (req) => {
       if (curr.media_type === "CAROUSEL_ALBUM") {
         const childrenMedia = carouselMediaList.filter(cm => cm.id === curr.id).map(cm => cm.children.data);
 
-        const allMedia = childrenMedia[0].map(cm => {          
+        const allMedia = childrenMedia[0].map(cm => {    
+          if (cm.media_type === "VIDEO") return null;
+          
           return {
             parentMediaType: mapInstagramMediaType(curr.media_type),
             parentMediaId: curr.id,
@@ -126,7 +128,7 @@ const getIgUserMedia = async (req) => {
           }
         })
 
-        return [...acc, allMedia];
+        return [...acc, allMedia.filter(x => x)];
       } else if (curr.media_type === "VIDEO") {
         return [...acc];
       } else {
@@ -145,7 +147,7 @@ const getIgUserMedia = async (req) => {
 
     return igUserMedia;
   } catch (e) {
-    console.log(e); 
+    // console.log(e); 
     throw e;
   }
 }

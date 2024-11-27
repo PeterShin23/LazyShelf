@@ -21,9 +21,18 @@ const getTestDataFromServer = async () => {
   }
 };
 
+const getUserConfigTest = async () => {
+  try {
+    const response = await axios.get('/api/get-user-config');
+    return response.data; // This will contain the server response
+  } catch (error) {
+    console.error('Error fetching data from server:', error);
+    throw error;
+  }
+};
+
 const retrieveLongLivedAccessToken = async (shortLivedAccessToken: string) => {
   try {
-    console.log(shortLivedAccessToken);
     const response = await axios.post(
       '/api/retrieve-long-token', 
       {
@@ -35,6 +44,8 @@ const retrieveLongLivedAccessToken = async (shortLivedAccessToken: string) => {
         }
       }
     );
+
+    // TODO: Need to send this directly off to aws
     return response.data;
   } catch (error) {
     console.error('Error fetching data from server:', error);
@@ -89,6 +100,7 @@ const getIgUserMediaOffline = async () => {
 export const API = {
   getDataFromServer,
   getTestDataFromServer,
+  getUserConfigTest,
   retrieveLongLivedAccessToken,
   getIgUser,
   getIgUserMedia,

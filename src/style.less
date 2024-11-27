@@ -53,6 +53,7 @@ body {
   position: relative; 
   z-index: 1; 
 }
+
 .media-list img:hover {
   transform: scale(1.1); 
   z-index: 10; 
@@ -60,61 +61,28 @@ body {
   cursor: pointer;
 }
 
-.media-carousel {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  overflow-x: auto;
-  // overflow-y: hidden;
-  background-color: rgba(0, 0, 0, 0.25); /* Background overlay */
-  z-index: 40; /* Make sure it's above other elements */
+.media-list-img-lazy{
+  opacity: 0;
+  animation: popIn 2s cubic-bezier(.19,1.01,.7,.9) forwards;
 }
 
-.media-carousel-content {
-  display: flex;
-  flex-direction: row;
-  // overflow-y: hidden;
-  min-width: 500px;
-  max-width: 80%;
-  column-gap: 12px;
-  position: relative; /* Needed for the close button to be positioned inside */
-}
-
-.media-carousel-content img {
-  height: 55vh;
-  transition: 0.3s;
-  filter: brightness(0.6);
-  transform-origin: center center; /* Keeps transformations centered */
-}
-
-.media-carousel-content img:hover {
-  filter: brightness(1);
-  transform: scale(1.45);   
-  z-index: 42; /* Bring it above other elements */
-}
-
-.media-carousel-content img:hover + * {
-  filter: brightness(0.8);
-  transform: scale(1.1);   
-  z-index: 41; /* Bring it above other elements */
-}
-
-.media-carousel-content img:has(+ *:hover) {
-  filter: brightness(0.8);
-  transform: scale(1.1);   
-  z-index: 41; /* Bring it above other elements */
-}
-
-.media-carousel-content::after {
-  content: "";
-  display: block;
-  width: 10vw; /* Adjust the space as needed */
-  flex-shrink: 0; /* Prevent shrinking */
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.015);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .app-font {
@@ -162,7 +130,7 @@ body {
 }
 
 .slide-in-right {
-  animation: slide-in-right 0.3s east-out forwards;
+  animation: slide-in-right 0.15s ease-out forwards;
 }
 
 @keyframes slide-in-right {
@@ -171,13 +139,13 @@ body {
     opacity: 0;
   }
   100% {
-    transofrm: translateX(0);
+    transform: translateX(0);
     opacity: 1;
   }
 }
 
 .slide-out-right {
-  animation: slide-out-right 0.3s east-out forwards;
+  animation: slide-out-right 0.15s ease-out forwards;
 }
 
 @keyframes slide-out-right {
@@ -231,4 +199,71 @@ body {
 
 .user-screen-card {
   scroll-snap-align: center;
+}
+
+.chevron-rotate-90 {
+  transform: rotate(90deg);
+  transition: transform 0.15s ease-in-out;
+}
+
+.chevron-rotate-270 {
+  transform: rotate(270deg);
+  transition: transform 0.15s ease-in-out;
+}
+
+.media-carousel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-x: auto;
+  // overflow-y: hidden;
+  background-color: rgba(0, 0, 0, 0.25); /* Background overlay */
+  z-index: 40; /* Make sure it's above other elements */
+}
+
+.media-carousel-content {
+  display: flex;
+  flex-direction: row;
+  // overflow-y: hidden;
+  min-width: 500px;
+  max-width: 80%;
+  column-gap: 12px;
+  position: relative; /* Needed for the close button to be positioned inside */
+}
+
+.media-carousel-content img {
+  height: 55vh;
+  transition: 0.3s;
+  filter: brightness(0.6);
+  transform-origin: center center; /* Keeps transformations centered */
+}
+
+.media-carousel-content::after {
+  content: "";
+  display: block;
+  width: 10vw; /* Adjust the space as needed */
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+.media-carousel-content img:hover {
+  filter: brightness(1);
+  transform: scale(1.45);   
+  z-index: 42; /* Bring it above other elements */
+}
+
+.media-carousel-content img:hover + * {
+  filter: brightness(0.8);
+  transform: scale(1.1);   
+  z-index: 41; /* Bring it above other elements */
+}
+
+.media-carousel-content img:has(+ *:hover) {
+  filter: brightness(0.8);
+  transform: scale(1.1);   
+  z-index: 41; /* Bring it above other elements */
 }

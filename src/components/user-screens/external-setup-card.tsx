@@ -11,7 +11,7 @@ export const ExternalSetupCard = () => {
       <p className="mb-2">Meta only allows Creator and Business accounts to be accessible for some reason :&#40; But you're a creator and you should be proud of that! If you don't want this label to be public, Instagram allows you to hide it!</p>
       <p>2. Create a Facebook business page. Link it to your Instagram account.</p>
       <br />
-      <p>From me: "Why Meta? Please make this easier."</p>
+      <p className="mb-3">From me: "Why Meta? Please make this easier."</p>
       <p>Finish this step, and let's get you set up for your personal photography portfolio!</p>
     </UserScreenCard>
   )

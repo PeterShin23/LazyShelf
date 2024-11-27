@@ -13,18 +13,18 @@ import { Media } from './shared/types/s3';
 import { appReducer } from './reducers/app-reducer';
 import { AppContext } from './contexts/app-context';
 import { ContainerView } from './shared/enums/fe';
+import { BETA_IG_USER_IDS } from './shared/constants';
+import { InitialState } from './shared/types/intial-state';
 
 type AppProps = {
-  initialState: any
+  initialState: InitialState
 }
 
-const App = (props) => {
-  console.log(props.initialState);
+const App = ({ initialState }) => {
+  console.log("initialState", initialState);
 
-  const [text, setText] = React.useState<string>("before click");
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
-  const [shortLivedToken, setShortLivedToken] = React.useState<string>(undefined);
-  const [igUserMedia, setIgUserMedia] = React.useState<Media[][]>(undefined);
+  const [igUserMedia, setIgUserMedia] = React.useState<Media[][]>(() => []);
 
   // const [hideOverflowY, setHideOverflowY] = React.useState<boolean>();
 
@@ -36,67 +36,46 @@ const App = (props) => {
     await API.getIgUserMedia()
     // await API.getIgUserMediaOffline()
       .then(res => {
-        console.log(res);
+        // console.log(res);
         setIgUserMedia(res)
       })
       .catch(err => console.log("failed to get media"))
   }
 
+  // const getUserConfig = async () => {
+  //   await API.getUserConfigTest()
+  //     .then(res => {
+  //       // console.log(res);
+  //       setUserConfig(res)
+  //     })
+  //     .catch(err => console.log("failed to get user config"))
+  // }
+
   React.useEffect(() => {
     // const apiResponse2 = API.getTestDataFromServer().then(res => console.log(res));
 
     getMedia();
-    getIgUserData();
-    const timerId = setTimeout(() => setIsLoading(false), 500)
+    // getIgUserData();
+    // getUserConfig();
+    const timerId = setTimeout(() => setIsLoading(false), 1500)
 
     return () => clearTimeout(timerId);
   }, []);
 
-  // const clientId = '1177264733363284';
-  // const redirectUri = `${httpsRoute}/instagram-auth.html`; // Should match exactly what you registered
-
-  // const openInstagramLogin = () => {
-  //   const authUrl = `https://www.instagram.com/oauth/authorize?enable_fb_login=0&force_authentication=1&client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish&instagram_graph_user_profile`;
-  //   window.open(authUrl, '_blank');
-  // };
-
-  // const handleAccessToken = async (event: MessageEvent) => {
-  //   try {
-  //     if (event.origin === httpsRoute) {
-  //       const shortLivedAccessToken = event.data?.code;
-  //       if (shortLivedAccessToken) {
-  //         console.log(shortLivedAccessToken)
-  //         // setShortLivedToken(code);
-  //         const response = await API.retrieveLongLivedAccessToken(shortLivedAccessToken)
-  //         // console.log(response);
-  //       }
-  //     }
-  //   } catch (e) {
-  //     console.log(e)
-  //     Toaster.error("Something went wrong!")
-  //   }
-  // };
-
   const getIgUserData = async () => {
     try {
       const response = await API.getIgUser();
-      console.log(response);
+      // console.log(response);
     } catch {
-      Toaster.error("Failed to get IG User Data");
+      Toaster.error(appState.uiColor, "Failed to get IG User Data");
     }
   }
 
-  // React.useEffect(() => {
-  //   window.addEventListener('message', handleAccessToken);
-
-  //   return () => {
-  //     window.removeEventListener('message', handleAccessToken);
-  //   };
-  // }, []);
-
   const [appState, appDispatch] = React.useReducer(appReducer, {
-    uiColor: "panda",
+    uiColor: initialState.userConfig?.uiOptions?.color ?? "green",
     view: ContainerView.MediaDisplay,
+    enabledIgUsers: BETA_IG_USER_IDS,
+    initialState: initialState,
   })
 
   return (
@@ -111,26 +90,9 @@ const App = (props) => {
           isLoading 
           ? <StartLoadingScreen />
           : (
-              // temp stuff
-              // <div>
-              //   <button 
-              //     className="text-white bg-black"
-              //     // onClick={openInstagramLogin}
-              //     onClick={getIgUserData}
-              //   >
-              //     Click me to change
-              //   </button>
-              //   <p className="text-blue-700">{text}</p>
-              // </div>
               <ShowCaseContainer 
                 igUserMedia={igUserMedia}
-                // hideVerticalOverflow={hideVerticalOverflow}
               />
-              // <div>
-              // {mediaLinks && mediaLinks.flatMap(m => (
-              //   <img src={m} className="max-w-80" />
-              // ))}
-              // </div>
             )
         ) : <></>}
       </div>

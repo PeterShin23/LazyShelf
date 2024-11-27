@@ -6,6 +6,8 @@ import { HeaderContainer } from "./header/header-container";
 import { MediaCarousel } from "./media/media-carousel";
 import { TheDevContainer } from "./the-dev/the-dev-container";
 import { SignUpCards } from "./user-screens/sign-up-cards";
+import { LazyImage } from "./common/lazy-media-image";
+import { LoginCard } from "./user-screens/login-card";
 
 type ShowCaseContainerProps = {
   igUserMedia?: Media[][];
@@ -19,14 +21,6 @@ export const ShowCaseContainer = (props: ShowCaseContainerProps) => {
   const { state, dispatch } = useAppContext();
 
   const [selectedMediaId, setSelectedMediaId] = React.useState<string>(undefined);
-
-  // React.useEffect(() => {
-  //   if (selectedMediaId) {
-  //     hideVerticalOverflow(true);
-  //   } else {
-  //     hideVerticalOverflow(false);
-  //   }
-  // }, [selectedMediaId]);
 
   const getContainerView = () => {
     switch (state.view) {
@@ -46,12 +40,10 @@ export const ShowCaseContainer = (props: ShowCaseContainerProps) => {
             <div className="media-container">
               <div className="media-list">
                 {flattenedMedias && flattenedMedias.flatMap(m => (
-                  <img 
-                    // ref={imageRef} 
-                    src={m.mediaUrl} 
-                    width="275px"
-                    onClick={() => setSelectedMediaId(m.mediaId)} 
-                    loading="lazy"
+                  <LazyImage
+                    // ref={imageRef}
+                    src={m.mediaUrl}
+                    onClick={() => setSelectedMediaId(m.mediaId)}
                   />
                 ))}
               </div>
@@ -67,6 +59,9 @@ export const ShowCaseContainer = (props: ShowCaseContainerProps) => {
       {getContainerView()}
       {state.view === ContainerView.SignUpCards && (
         <SignUpCards />
+      )}
+      {state.view === ContainerView.LoginCard && (
+        <LoginCard />
       )}
       {selectedMediaId && (
         <MediaCarousel 
