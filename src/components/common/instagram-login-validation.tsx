@@ -1,7 +1,8 @@
 import * as React from "react";
 import { API } from "../../client/api";
+import { AppActions } from "../../contexts/app-context";
 import useAppContext from "../../hooks/app-hook";
-import { httpsRoute } from "../../shared/constants/https";
+import { ContainerView } from "../../shared/enums/fe";
 import { InstagramIcon } from "../../static/svgs/instagram";
 import * as Toaster from "../common/toast";
 
@@ -15,13 +16,14 @@ type InstagramLoginValidationProps = {
 }
 
 export const InstagramLoginValidation = ({ validationFlow } : InstagramLoginValidationProps) => {
-  const { state } = useAppContext();
+  const { state, dispatch } = useAppContext();
 
   const [formValues, setFormValues] = React.useState({
     instagramUsername: "",
   });
   const [onInstagramLoginHover, setOnInstagramLoginHover] = React.useState<boolean>(false);
   const [isUsernameValidationError, setIsUsernameValidationError] = React.useState<string>("");
+  const [isProcessing, setIsProcessing] = React.useState<boolean>(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,43 +35,70 @@ export const InstagramLoginValidation = ({ validationFlow } : InstagramLoginVali
     return !!formValues.instagramUsername
   }, []);
 
-  const redirectUri = `${httpsRoute}/instagram-auth.html`; // Should match exactly what you registered
+  const redirectUri = `${process.env.APP_URL}/instagram-auth.html`; // Should match exactly what you registered
 
   const openInstagramLogin = () => {
-    Toaster.error(state.uiColor, "Something went wrong!")
+    try {
+      setIsProcessing(true);
 
-    if (!formValues.instagramUsername) {
-      setIsUsernameValidationError("Missing username.");
-      return;
+      if (!formValues.instagramUsername) {
+        setIsUsernameValidationError("Missing username.");
+        return;
+      }
+  
+      if (!state.enabledIgUsers.includes(formValues.instagramUsername)) {
+        setIsUsernameValidationError("Currently beta-testing.");
+        return;
+      }
+  
+      // CHECK HERE FOR EXISTENCE IN AWS WHEN IN SIGNIN FLOW
+      if (validationFlow === InstagramValidationFlow.SignUp) {
+        setIsUsernameValidationError("Authorization failed! Please contact the developer")
+        return;
+      }
+  
+      const authUrl = `https://www.instagram.com/oauth/authorize?enable_fb_login=0&force_authentication=1&client_id=${process.env.INSTAGRAM_CLIENT_ID}&redirect_uri=${redirectUri}&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish&instagram_graph_user_profile`;
+      window.open(authUrl, '_blank');
+    } catch (err) {
+      Toaster.error("Failed to open Instagram validation!")
+    } finally {
+      setIsProcessing(false);
     }
-
-    if (!state.enabledIgUsers.includes(formValues.instagramUsername)) {
-      setIsUsernameValidationError("Currently beta-testing.");
-      return;
-    }
-
-    if (true) {
-      setIsUsernameValidationError("Authorization failed! Please contact the developer")
-      return;
-    }
-
-    const authUrl = `https://www.instagram.com/oauth/authorize?enable_fb_login=0&force_authentication=1&client_id=${process.env.INSTAGRAM_CLIENT_ID}&redirect_uri=${redirectUri}&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish&instagram_graph_user_profile`;
-    window.open(authUrl, '_blank');
   };
 
   const handleAccessToken = async (event: MessageEvent) => {
+    if (!isProcessing) return;
+
     try {
-      if (event.origin === httpsRoute) {
-        const shortLivedAccessToken = event.data?.code;
-        if (shortLivedAccessToken) {
-          console.log(shortLivedAccessToken)
-          // setShortLivedToken(code);
-          const response = await API.retrieveLongLivedAccessToken(shortLivedAccessToken)
-          console.log(response);
-        }
+      // Validate the origin of the message
+      if (event.origin !== process.env.APP_URL) {
+        console.warn('Origin mismatch:', event.origin);
+        return;
+      }
+
+      const shortLivedAccessToken = event.data?.code;
+
+      if (!shortLivedAccessToken) {
+        throw new Error("Authorization code not received!");
+      }
+      
+      if (validationFlow === InstagramValidationFlow.SignIn) {
+        dispatch({
+          type: AppActions.SetSignedIn,
+          payload: true
+        });
+        dispatch({
+          type: AppActions.SetContainerView,
+          payload: ContainerView.MediaDisplay
+        })
+      } else {
+
+        // TODO: Figure this part out
+        return;
+        // const response = await API.createUser(shortLivedAccessToken);
+        // const response = await API.retrieveLongLivedAccessToken(shortLivedAccessToken)
       }
     } catch (e) {
-      console.log(e)
       Toaster.error(state.uiColor, "Something went wrong!")
     }
   };
@@ -115,10 +144,12 @@ export const InstagramLoginValidation = ({ validationFlow } : InstagramLoginVali
           onMouseLeave={() => setOnInstagramLoginHover(false)}
           disabled={isInstagramRedirectDisabled}  
         >
-          <InstagramIcon strokeColor={onInstagramLoginHover ? "white" : "#0081FB"}/>
+          <InstagramIcon 
+            strokeColor={onInstagramLoginHover ? "white" : "#0081FB"}
+            onClick={() => {}}  
+          />
           <span className="">Log In</span>
         </button>
       </div>
   )
-  
 }

@@ -7,9 +7,11 @@
         // Extract the authorization code from the URL query parameter
         const params = new URLSearchParams(window.location.search);
         const code = params.get('code');
-        if (code) {
+        if (code && window.opener) {
+          const parentOrigin = window.opener.location.origin; // Dynamically detect the parent's origin
+
           // Send the authorization code to the parent window (the React app)
-          window.opener.postMessage({ code: code }, '*');
+          window.opener.postMessage({ code: code }, parentOrigin);
 
           // Close the tab after sending the message
           try {

@@ -1,11 +1,8 @@
-// import React from 'react';
 import './App.css';
 import './style.less';
 
 import { API } from "./client/api";
 import * as React from "react";
-import * as Toaster from "./components/common/toast";
-import { httpsRoute } from "./shared/constants/https";
 import { StartLoadingScreen } from './components/common/start-loading-screen';
 import { ShowCaseContainer } from './components/showcase-container';
 import { colorPairs } from './constants/colors';
@@ -21,68 +18,43 @@ type AppProps = {
 }
 
 const App = ({ initialState }) => {
-  console.log("initialState", initialState);
-
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [igUserMedia, setIgUserMedia] = React.useState<Media[][]>(() => []);
 
-  // const [hideOverflowY, setHideOverflowY] = React.useState<boolean>();
-
-  // const hideVerticalOverflow = (hide: boolean) => {
-  //   setHideOverflowY(hide);
-  // }
-
   const getMedia = async () => {
-    await API.getIgUserMedia()
-    // await API.getIgUserMediaOffline()
+    await API.getIgUserMedia(initialState.userConfig)
       .then(res => {
-        // console.log(res);
         setIgUserMedia(res)
       })
       .catch(err => console.log("failed to get media"))
   }
 
-  // const getUserConfig = async () => {
-  //   await API.getUserConfigTest()
-  //     .then(res => {
-  //       // console.log(res);
-  //       setUserConfig(res)
-  //     })
-  //     .catch(err => console.log("failed to get user config"))
-  // }
-
   React.useEffect(() => {
-    // const apiResponse2 = API.getTestDataFromServer().then(res => console.log(res));
+    if (typeof window !== "undefined") {
+      history.replaceState(null, "", `${window.location.origin}/${initialState.username}`);
+    }
 
     getMedia();
-    // getIgUserData();
-    // getUserConfig();
-    const timerId = setTimeout(() => setIsLoading(false), 1500)
+    const timerId = setTimeout(() => setIsLoading(false), 2500)
 
     return () => clearTimeout(timerId);
   }, []);
 
-  const getIgUserData = async () => {
-    try {
-      const response = await API.getIgUser();
-      // console.log(response);
-    } catch {
-      Toaster.error(appState.uiColor, "Failed to get IG User Data");
-    }
-  }
-
   const [appState, appDispatch] = React.useReducer(appReducer, {
-    uiColor: initialState.userConfig?.uiOptions?.color ?? "green",
+    uiColor: initialState.userConfig?.uiOptions?.color ?? "panda",
     view: ContainerView.MediaDisplay,
     enabledIgUsers: BETA_IG_USER_IDS,
     initialState: initialState,
-  })
+    isSignedIn: false,
+    updatedConfigs: undefined,
+  });
 
   return (
     <AppContext.Provider value={{ state: appState, dispatch: appDispatch }}>
       <div id="showcase-container" className={`app-font`} 
         style={{ 
           backgroundColor: colorPairs[appState.uiColor].light, 
+          color: colorPairs[appState.uiColor].darkest,
           minHeight: "100vh",
           maxHeight: "fit-content"
         }}>

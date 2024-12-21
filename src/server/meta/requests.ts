@@ -1,17 +1,14 @@
 import axios from "axios";
 import { Request } from "express";
 import { Media } from "../../shared/types/s3";
-import { httpsRoute, igClientSecret, longLivedAccessToken } from "../../shared/constants/https";
 import { mapInstagramMediaType } from "../../shared/helpers/media";
+import SecretsHelper from "../../shared/helpers/secrets-helpers";
 
 const retrieveLongLivedAccessToken = async (req: Request) => {
   try {
     const { shortLivedAccessToken } = req.body;
 
-    console.log(shortLivedAccessToken);
-
     const url = `https://graph.instagram.com/access_token`
-    console.log("url", url);
 
     // convert to api gateway endpoint
     const response = await axios.get(url, {
@@ -22,11 +19,10 @@ const retrieveLongLivedAccessToken = async (req: Request) => {
       },
       headers: {
         "Content-Type": "application/json",
-        // "Access-Control-Allow-Origin": `${httpsRoute}/`
+        "Access-Control-Allow-Origin": `${process.env.APP_URL}` // was commented out maybe don't need this?
       }
     });
 
-    // console.log(response);
     return response.data;
   } catch (e) {
     console.log(e);
@@ -35,14 +31,13 @@ const retrieveLongLivedAccessToken = async (req: Request) => {
   }
 }
 
-const getIgUser = async (req) => {
+const getIgUser = async (req, userConfig: any) => {
   try {
-    const { shortLivedAccessToken } = req.body;
-
-    // console.log(shortLivedAccessToken);
+    const secretsHelper = new SecretsHelper();
+    let longLivedAccessToken = userConfig.longLivedAccessToken;
+    longLivedAccessToken = secretsHelper.decrypt(longLivedAccessToken);
 
     const url = `https://graph.instagram.com/v21.0/me`
-    // console.log("url", url);
 
     // convert to api gateway endpoint
     const response = await axios.get(url, {
@@ -52,24 +47,23 @@ const getIgUser = async (req) => {
       },
       headers: {
         "Content-Type": "application/json",
-        // "Access-Control-Allow-Origin": `${httpsRoute}/`
+        "Access-Control-Allow-Origin": `${process.env.APP_URL}` // was commented out maybe don't need this?
       }
     });
 
-    // console.log(response);
     return response.data;
   } catch (e) {
-    // console.log(e); 
+    console.log(e); 
 
     return {};
   }
 }
 
-const getIgUserMedia = async (req) => {
+const getIgUserMedia = async (req, userConfig) => {
   try {
-    const { shortLivedAccessToken } = req.body;
-
-    console.log(shortLivedAccessToken);
+    const secretsHelper = new SecretsHelper();
+    let longLivedAccessToken = userConfig.longLivedAccessToken;
+    longLivedAccessToken = secretsHelper.decrypt(longLivedAccessToken);
 
     const url = `https://graph.instagram.com/v21.0/me/media`
 
@@ -81,7 +75,7 @@ const getIgUserMedia = async (req) => {
       },
       headers: {
         "Content-Type": "application/json",
-        // "Access-Control-Allow-Origin": `${httpsRoute}/`
+        "Access-Control-Allow-Origin": `${process.env.APP_URL}` // was commented out maybe don't need this?
       }
     });
 
@@ -101,7 +95,7 @@ const getIgUserMedia = async (req) => {
           },
           headers: {
             "Content-Type": "application/json",
-            // "Access-Control-Allow-Origin": `${httpsRoute}/`
+            "Access-Control-Allow-Origin": `${process.env.APP_URL}` // was commented out maybe don't need this?
           }
         }).then(res => res.data)
       }
@@ -147,7 +141,6 @@ const getIgUserMedia = async (req) => {
 
     return igUserMedia;
   } catch (e) {
-    // console.log(e); 
     throw e;
   }
 }

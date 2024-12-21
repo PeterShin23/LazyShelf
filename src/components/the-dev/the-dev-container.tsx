@@ -59,23 +59,28 @@ export const TheDevContainer = () => {
           </div>
         </div>
       </div>
-      <div className="flex w-1/2 flex-col text-left font-extralight">
+      <div 
+        className="flex w-1/2 flex-col text-left font-extralight font-size-sm"
+        style={{
+          color: colorPairs[state.uiColor].darkest,
+        }}
+      >
         <p>My name is Peter, and I'm a software engineer and wannabe photographer.</p>
         <br />
         <p>For my fellow people in the Tech Industry, I am:</p>
         <ul className="ml-4">
-          <li>1. a Full Stack Engineer.</li>
-          <li>2. with 2 Years of Experience.</li>
+          <li>1. a Full Stack Software Engineer.</li>
+          <li>2. been in the industry since 2022.</li>
           <li>3. and have a passion for taking on challenging tasks that teach me new things.</li>
         </ul>
         <br />
         <p>Skills applied doing this project include React Typescript, Server-Side Rendering, TailwindCSS, AWS, GO &#40;backend&#41;, and photography :&#41;</p>
         <br />
-        <p>For my fellow photographers, my photography inspirations are:</p>
+        <p>For my fellow photographers, I use a Lumix S5II as my main camera. My photography inspirations are:</p>
         <ul className="ml-4">
-          <li>1. Nature in the cities.</li>
-          <li>2. Moments with friends.</li>
-          <li>3. Remembering my family.</li>
+          <li>1. nature in the cities.</li>
+          <li>2. moments with friends.</li>
+          <li>3. memories of my family.</li>
         </ul>
         <br />
         Reach out, I'd love to connect and have a conversation!

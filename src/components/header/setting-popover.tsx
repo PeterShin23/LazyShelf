@@ -8,6 +8,8 @@ export const SettingPopover = ({ closeSettingPopover }) => {
   const { state, dispatch } = useAppContext();
   const { uiColor } = state;
 
+  const [settingHover, setSettingHover] = React.useState<string | null>(null);
+
   const onSettingClick = (onClick) => {
     onClick();
     closeSettingPopover();
@@ -15,9 +17,9 @@ export const SettingPopover = ({ closeSettingPopover }) => {
 
   const settingActions = React.useMemo(() => [
     {
-      id: "LOGIN",
+      id: "LOG_IN",
       label: "Log In",
-      hidden: false,
+      hidden: state.isSignedIn,
       onClick: () => {
         dispatch({
           type: AppActions.SetContainerView,
@@ -28,7 +30,7 @@ export const SettingPopover = ({ closeSettingPopover }) => {
     {
       id: "REGISTER",
       label: "Register",
-      hidden: false,
+      hidden: state.isSignedIn,
       onClick: () => {
         dispatch({
           type: AppActions.SetContainerView,
@@ -37,13 +39,18 @@ export const SettingPopover = ({ closeSettingPopover }) => {
       },
     },
     {
-      id: "SETTINGS",
-      label: "Settings",
-      hidden: true,
-      onClick: () => {},
+      id: "CREATOR_MODE",
+      label: "Creator Mode",
+      hidden: !state.isSignedIn,
+      onClick: () => {
+        dispatch({
+          type: AppActions.SetContainerView,
+          payload: ContainerView.CreatorMode
+        })
+      },
     },
     {
-      id: "THEDEV",
+      id: "THE_DEV",
       label: "Meet the Dev",
       hidden: false,
       onClick: () => {
@@ -69,10 +76,15 @@ export const SettingPopover = ({ closeSettingPopover }) => {
        return ( <button
           className="p-2 text-left font-size-s"
           style={{
-            color: colorPairs[uiColor].dark
+            color: colorPairs[uiColor].dark,
+            backgroundColor: colorPairs[uiColor].light,
+            filter: settingHover === setting.id ? "brightness(0.95)" : undefined,
+            transition: "filter 0.2s ease",
           }}
           id={setting.id}
           onClick={() => onSettingClick(setting.onClick)}
+          onMouseEnter={() => setSettingHover(setting.id)}
+          onMouseLeave={() => setSettingHover(null)}
         >
           {setting.label}
         </button>)

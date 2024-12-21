@@ -2,7 +2,7 @@ export const colorPairs = {
   green: {
     light: "#dce0d9",
     dark: "#75836a",
-    darkest: "#10120f"
+    darkest: "#434b3c"
   },
   parchment: {
     light: "#ded3c8",
@@ -30,3 +30,10 @@ export const colorPairs = {
     darkest: "#606060"
   }
 }
+
+export const colorPairsList = Object.entries(colorPairs).map(([name, { light, dark, darkest }]) => ({
+  name,
+  light,
+  dark,
+  darkest
+}));

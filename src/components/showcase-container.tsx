@@ -8,6 +8,9 @@ import { TheDevContainer } from "./the-dev/the-dev-container";
 import { SignUpCards } from "./user-screens/sign-up-cards";
 import { LazyImage } from "./common/lazy-media-image";
 import { LoginCard } from "./user-screens/login-card";
+import { colorPairs } from "../constants/colors";
+import { ColorPicker } from "./common/color-picker";
+import { AppActions } from "../contexts/app-context";
 
 type ShowCaseContainerProps = {
   igUserMedia?: Media[][];
@@ -20,7 +23,8 @@ export const ShowCaseContainer = (props: ShowCaseContainerProps) => {
 
   const { state, dispatch } = useAppContext();
 
-  const [selectedMediaId, setSelectedMediaId] = React.useState<string>(undefined);
+  const [selectedMediaId, setSelectedMediaId] = React.useState<string | undefined>(undefined);
+  const [colorPickerPosition, setColorPickerPosition] = React.useState<any>(null)
 
   const getContainerView = () => {
     switch (state.view) {
@@ -30,11 +34,20 @@ export const ShowCaseContainer = (props: ShowCaseContainerProps) => {
         return (
           <>
             <div className="flex flex-col justify-center my-8" style={{ marginLeft: "100px", marginRight: "100px" }}>
-              <p className="flex justify-center font-size-xl font-weight-light">
-                This is the tag line.
+              <p 
+                className="flex justify-center font-size-xl font-weight-light"
+                style={{
+                  color: colorPairs[state.uiColor].darkest,
+                }} 
+                contentEditable={state.view === ContainerView.CreatorMode}>
+                {state.isSignedIn ? "Signed In!" : "Based In Washington D.C."}
               </p>
-              <p className="flex justify-center font-size-sm font-weight-medium">
-                I take pictures of nature in the cities. I'm based in Germany, and I take pictures using the Canon EOS RP.
+              <p 
+                className="flex justify-center font-size-sm font-weight-medium"
+                style={{
+                  color: colorPairs[state.uiColor].darkest,
+                }}>
+                Message me on LinkedIn or Instagram to connect! Find out more about me in the top right "Meet The Dev".
               </p>
             </div>
             <div className="media-container">
@@ -43,8 +56,11 @@ export const ShowCaseContainer = (props: ShowCaseContainerProps) => {
                   <LazyImage
                     // ref={imageRef}
                     src={m.mediaUrl}
-                    onClick={() => setSelectedMediaId(m.mediaId)}
-                  />
+                    onClick={() => {
+                      if (state.view === ContainerView.CreatorMode) return;
+
+                      setSelectedMediaId(m.mediaId);
+                    }} />
                 ))}
               </div>
             </div>
@@ -53,8 +69,37 @@ export const ShowCaseContainer = (props: ShowCaseContainerProps) => {
     }
   }
 
+  const onColorPairClick = (colorPairName: string) => {
+    dispatch({
+      type: AppActions.SetUpdatedConfigs,
+      payload: { ...state.updatedConfigs, updatedUiColor: colorPairName },
+    });
+    dispatch({
+      type: AppActions.SetUiOptionColor,
+      payload: colorPairName,
+    });
+  }
+
+  const updateUiColorHandler = React.useCallback((e) => {
+    if (state.view !== ContainerView.CreatorMode) return;
+
+    if (e.target.id !== "showcase-content-container" || colorPickerPosition) {
+      setColorPickerPosition(null);
+    } else {
+      setColorPickerPosition({ x: e.pageX, y: e.pageY });
+    }
+  }, [state.view, colorPickerPosition]);
+
+  React.useEffect(() => {
+    document.addEventListener("click", updateUiColorHandler);
+
+    return () => {
+      document.removeEventListener("click", updateUiColorHandler);
+    };
+  }, [updateUiColorHandler])
+
   return (
-    <div className="">
+    <div id="showcase-content-container" className="relative">
       <HeaderContainer />
       {getContainerView()}
       {state.view === ContainerView.SignUpCards && (
@@ -68,6 +113,13 @@ export const ShowCaseContainer = (props: ShowCaseContainerProps) => {
           initialMediaId={selectedMediaId} 
           media={flattenedMedias}
           closeCarousel={() => setSelectedMediaId(undefined)}
+        />
+      )}
+      {colorPickerPosition && (
+        <ColorPicker
+          xPosition={colorPickerPosition.x}
+          yPosition={colorPickerPosition.y}
+          onClick={onColorPairClick}
         />
       )}
     </div>

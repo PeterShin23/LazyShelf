@@ -1,5 +1,5 @@
 import { ContainerView } from "../shared/enums/fe";
-import { AppActions, AppDispatchType, AppState } from "../contexts/app-context";
+import { AppActions, AppDispatchType, AppState, UpdatedConfigs } from "../contexts/app-context";
 
 const actionExecutorMap: Record<AppActions, (state: AppState, payload: any) => AppState> = {
   [AppActions.SetUiOptionColor]: (state: AppState, uiColor: string): AppState => {
@@ -10,7 +10,19 @@ const actionExecutorMap: Record<AppActions, (state: AppState, payload: any) => A
       ...state,
       view,
     }
-  }
+  },
+  [AppActions.SetSignedIn]: (state: AppState, isSignedIn: boolean): AppState => {
+    return {
+      ...state,
+      isSignedIn,
+    }
+  },
+  [AppActions.SetUpdatedConfigs]: (state: AppState, updatedConfigs: UpdatedConfigs): AppState => {
+    return {
+      ...state,
+      updatedConfigs,
+    }
+  },
 }
 
 export const appReducer = (state: AppState, action: AppDispatchType) => {

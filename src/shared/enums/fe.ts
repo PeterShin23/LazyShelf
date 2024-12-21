@@ -3,4 +3,5 @@ export enum ContainerView {
   TheDevDisplay = 2, 
   SignUpCards = 3,
   LoginCard = 4,
+  CreatorMode = 5,
 }

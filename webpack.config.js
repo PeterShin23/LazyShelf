@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const DotEnv = require('dotenv-webpack')
 
 module.exports = {
   entry: './src/client/index.tsx',
@@ -56,9 +57,6 @@ module.exports = {
       inject: false,    // this being true/not set caused bundle.js to be duplicated in index.html
       scriptLoading: 'defer'
     }),
-    // TODO: Might need to use this
-    // new webpack.DefinePlugin({
-    //   'process.env.API_URL': JSON.stringify(process.env.API_URL),
-    // }),
+    new DotEnv(),
   ],
 };

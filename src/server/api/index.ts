@@ -29,7 +29,6 @@ router.get('/test-data', async (req, res) => {
     const response = await s3Req.fetchTestData();
 
     res.json(response);
-    // console.log("response", response)
   } catch (e) {
     console.log(e)
     res.status(500).send("an error occurred");
@@ -39,7 +38,6 @@ router.get('/test-data', async (req, res) => {
 router.get('/get-user-config', async (req, res) => {
   try {
     const response = await dynamoReq.fetchTestData();
-    // console.log(response);
     res.json(response);
   } catch (e) {
     console.log(e)
@@ -52,17 +50,34 @@ router.post('/retrieve-long-token', async (req, res) => {
     const response = await metaReq.retrieveLongLivedAccessToken(req);
 
     res.json(response);
-    console.log("response", response)
   } catch (e) {
     console.log(e)
     res.status(500).send("an error occurred");
   }
 })
 
-router.get('/get-ig-user', async (req, res) => {
+router.post('/create-internal-user', async (req, res) => {
   try {
-    const response = await metaReq.getIgUser(req);
-    // console.log(response);
+    const accessToken = await metaReq.retrieveLongLivedAccessToken(req);
+
+    // some data here about the long lived access token
+    // also need the user's instagram username
+    const username = "";
+    const userConfig = await dynamoReq.createUser(username, accessToken);
+
+    res.json(userConfig);
+  } catch (e) {
+    console.log(e)
+    res.status(500).send("an error occurred");
+  }
+})
+
+
+router.post('/get-ig-user', async (req, res) => {
+  try {
+    const { userConfig } = req.body;
+
+    const response = await metaReq.getIgUser(req, userConfig);
     res.json(response);
   } catch (e) {
     console.log(e)
@@ -70,11 +85,24 @@ router.get('/get-ig-user', async (req, res) => {
   }
 })
 
-router.get('/get-ig-user-media', async (req, res) => {
+router.post('/get-ig-user-media', async (req, res) => {
   try {
-    const response = await metaReq.getIgUserMedia(req);
-    // console.log(response);
+    const { userConfig } = req.body;
+    
+    const response = await metaReq.getIgUserMedia(req, userConfig);
+
     res.json(response);
+  } catch (e) {
+    console.log(e)
+    res.status(500).send("An error occurred")
+  }
+})
+
+router.post('/log-to-server', async (req, res) => {
+  try {
+    const { data } = req.body;
+    
+    console.log("logging from client to server", data);
   } catch (e) {
     console.log(e)
     res.status(500).send("An error occurred")
