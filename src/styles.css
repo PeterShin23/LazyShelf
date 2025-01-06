@@ -1,3 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.App {
+  text-align: center;
+}
+
 
 /* Horizontal scrollbar */
 ::-webkit-scrollbar:horizontal {
@@ -30,8 +38,6 @@ body {
   overflow-y: scroll; /* Enable vertical scrolling without showing the scrollbar */
 }
 
-
-/////////
 .media-container {
   margin-left: 100px;
   margin-right: 100px;
@@ -221,7 +227,7 @@ body {
   width: 100vw;
   height: 100vh;
   overflow-x: auto;
-  // overflow-y: hidden;
+  /* // overflow-y: hidden; */
   background-color: rgba(0, 0, 0, 0.25); /* Background overlay */
   z-index: 40; /* Make sure it's above other elements */
 }
@@ -229,10 +235,10 @@ body {
 .media-carousel-content {
   display: flex;
   flex-direction: row;
-  // overflow-y: hidden;
+  /* // overflow-y: hidden; */
   min-width: 500px;
   max-width: 80%;
-  column-gap: 12px;
+  column-gap: 8px;
   position: relative; /* Needed for the close button to be positioned inside */
 }
 

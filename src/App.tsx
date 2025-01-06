@@ -1,5 +1,4 @@
-import './App.css';
-import './style.less';
+import './styles.css';
 
 import { API } from "./client/api";
 import * as React from "react";

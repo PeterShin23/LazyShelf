@@ -11,14 +11,16 @@ import { dynamoReq } from './aws/dynamoDb/requests';
 import 'dotenv/config'
 import { BETA_IG_USER_IDS } from '../shared/constants';
 import { metaReq } from './meta/requests';
-import SecretsHelper from '../shared/helpers/secrets-helpers';
+import SecretsHelper from '../shared/helpers/secrets-helpers'; // Keep here
 
 const app = express();
 
 // Parse JSON in req body
 app.use(express.json());
-// Serve static files from the 'public' directory
-app.use('/static', express.static(path.resolve(__dirname, '../../public')));
+// Serve static files from the 'public' directory -> bundle.js
+app.use('/static', express.static(path.resolve(__dirname, '../../public/static')));
+// // for styles
+app.use(express.static(path.resolve(__dirname, '../../public')))
 // Serve instagram-auth.html independently
 app.get('/instagram-auth.html', (_, res) => {
   res.sendFile(path.resolve(__dirname, '../../public/instagram-auth.html'));
@@ -80,6 +82,7 @@ app.get('/*', async (req, res) => {
           href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&display=swap" 
           rel="stylesheet"
         />
+        <link rel="stylesheet" href="/static/styles/main.css" />
         <title>TheShowcase: @${actualUsername}</title>
       </head>
       <body>
